@@ -1,0 +1,14 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "cheerio": "^0.17.0",
+    "ejs": "*",
+    "express": "*",
+    "fs-extra": "^0.12.0"
+  }
+}
