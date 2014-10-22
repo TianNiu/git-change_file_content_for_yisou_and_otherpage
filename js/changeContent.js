@@ -96,7 +96,11 @@ function stepsForModified(prev_html) {
         },
         step4: function() {
             var the_custom_service = getModifiedPartContent("custom_service");
-            prev_html = prev_html.replace(/<\/body>/, the_custom_service+"</body>");
+            if(!prev_html.indexOf(the_custom_service)){
+                console.log("already exist");
+                prev_html = prev_html.replace(/<\/body>/, the_custom_service+"</body>");
+            }
+            
             //console.log("i am the 4");
             //console.log(prev_html);
             return prev_html;
