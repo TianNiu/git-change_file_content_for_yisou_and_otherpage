@@ -37,7 +37,7 @@ exports.main = function() {
     //var html = fs.readFileSync('projects/aewdlc/index.html').toString();
 };
 /**
- * config,待添加的各个文件内容的路径配置
+ * config,待添加的各个文件内容路径配置
  * @type {Object}
  */
 var _modified_part_path = {
