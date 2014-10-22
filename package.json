@@ -9,6 +9,7 @@
     "cheerio": "^0.17.0",
     "ejs": "*",
     "express": "*",
+    "findit": "^2.0.0",
     "fs-extra": "^0.12.0"
   }
 }
