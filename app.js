@@ -3,6 +3,7 @@ var app = express();
 var path = require('path');
 //var index = require('./routes/index');
 var changeContent = require('./js/changeContent');
+var ConvertCharset = require('./js/ConvertCharset');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.engine('html', require('ejs').renderFile);
@@ -23,5 +24,5 @@ app.post("/uploadfile", uploadhandler.main);*/
  * node启动执行模块changeContent.main()
  */
 changeContent.main();
-
+//ConvertCharset.main();
 app.listen(3000);

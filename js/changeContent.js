@@ -6,6 +6,8 @@ var fs = require('fs-extra');
 var util = require('util');
 var cheerio = require('cheerio');
 var findit = require('findit');
+//自定义模块
+var ConvertCharset = require('./ConvertCharset');
 
 var project_path = "projects/wap";
 /**
@@ -17,7 +19,7 @@ var project_path = "projects/wap";
 function findIndexFile(project_path, next) {
     var finder = findit(project_path);
     finder.on('file', function(file, stat) {
-        if (/index.htm/.test(file)) {
+        if (/(\\|\/)index.htm.?/gi.test(file)) {
             //console.log(file);
             next(file);
         }
@@ -64,6 +66,7 @@ function stepsForModified(prev_html) {
     /* some steps function*/
     var steps_for_modified = {
         step1: function() {
+            /* 使用页首替换*/
             var the_head_html = getModifiedPartContent("head");
             //var source = html.match(/<!--.*include.*header.html.*-->/i)[0];
             prev_html = prev_html.replace(/<!--.*include.*header.html.*-->/i, the_head_html);
@@ -75,6 +78,7 @@ function stepsForModified(prev_html) {
             return this;
         },
         step2: function() {
+            /* 使用页脚替换*/
             var the_foot_html = getModifiedPartContent("foot");
             //debugger;
             //var source = html.match(/<!--.*include.*footer.html.*-->/i)[0];
@@ -86,7 +90,7 @@ function stepsForModified(prev_html) {
             return this;
         },
         step3: function() {
-            /* 留言板内容*/
+            /* 加入留言板内容*/
             var the_message_board = getModifiedPartContent("message_board");
             //$("message_board").append(the_head_html);
             prev_html = prev_html.replace(/document.*?800\.91jmw.*?<\/script>/, '</script>' + the_message_board);
@@ -95,19 +99,31 @@ function stepsForModified(prev_html) {
             return this;
         },
         step4: function() {
+            /* 加入客服代码*/
+            var match = /^isShowAll==1.*scroll\.js.*dl1\.js.*www\.53kf\.com$/;
             var the_custom_service = getModifiedPartContent("custom_service");
-            if(!prev_html.indexOf(the_custom_service)){
-                console.log("already exist");
-                prev_html = prev_html.replace(/<\/body>/, the_custom_service+"</body>");
+            if (!match.test(the_custom_service)) {
+                //console.log("no exist");
+                prev_html = prev_html.replace(/<\/body>/, the_custom_service + "</body>");
             }
-            
+
             //console.log("i am the 4");
             //console.log(prev_html);
+            return this;
+        },
+        step5: function() {
+            /* 去除utf-8代码*/
+            prev_html = prev_html.replace("charset=utf-8", "");
+
             return prev_html;
         }
     };
     /* 返回步骤执行之后的结果*/
-    return steps_for_modified.step1().step2().step3().step4();
+    return steps_for_modified.step1()
+        .step2()
+        .step3()
+        .step4()
+        .step5();
 };
 /**
  * 修改index文件的内容
@@ -122,12 +138,14 @@ exports.ModifyContentsOfIndex = function(filepath) {
     //steps_for_modified.step2(steps_for_modified.step1(html));
     /* use $ to save the modified content*/
     var the_result_html = stepsForModified(html);
-    console.log("最终幻想是:"+the_result_html);
+    //console.log("最终幻想是:"+the_result_html);
     fs.writeFile(filepath, the_result_html, "utf-8", function(err) {
         if (err) {
             throw err;
         } else {
-            console.log("write over");
+            /* 文件转码*/
+            console.log("i am the filepath:" + filepath);
+            ConvertCharset.main(filepath);
         }
     });
 
