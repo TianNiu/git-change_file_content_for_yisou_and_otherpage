@@ -1,5 +1,5 @@
 /************************************************
- *
+ * 用指定路径的文件内容(追加)覆盖index.html文件内容
  ************************************************/
 //文件模块
 var fs = require('fs-extra');
@@ -23,20 +23,23 @@ function findIndexFile(project_path, next) {
         }
     });
 };
-
-
-function function_name(filepath) {
-
-};
+/**
+ * module main,模块入口
+ * @return {[type]} [description]
+ */
 exports.main = function() {
     //console.log("i am superman!");
     //console.log("i get the file path"+findIndexFile(project_path));
+    /* 首先找到index.html文件*/
     findIndexFile(project_path, exports.ModifyContentsOfIndex);
 
 
     //var html = fs.readFileSync('projects/aewdlc/index.html').toString();
 };
-/* 待添加的各个文件内容路径*/
+/**
+ * config,待添加的各个文件内容路径配置
+ * @type {Object}
+ */
 var _modified_part_path = {
     "head": "config/modified_files/modified-head.html",
     "foot": "config/modified_files/modified-foot.html",
