@@ -1,0 +1,8 @@
+{
+  "windows":
+      {
+          // "cmd": ["taskkill", "/F", "/IM", "node.exe", "&", "C:/Program Files/nodejs/node.exe", "$file"],
+          "cmd": ["taskkill", "/F", "/IM", "node.exe", "&", "node", "--harmony", "$file"],
+          "shell": true
+      }
+}
